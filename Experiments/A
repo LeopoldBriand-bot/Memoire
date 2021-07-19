@@ -1,0 +1,10 @@
+FROM node
+
+WORKDIR /usr/src/app
+COPY . .
+RUN npm ci
+RUN npm run build
+RUN PORT=7000
+EXPOSE 7000
+
+CMD [ "node", "./dist/index.js" ]
