@@ -1,0 +1,14 @@
+FROM node:alpine AS buildStage
+
+WORKDIR /usr/src/app
+COPY . .
+RUN npm i && npm run build
+
+
+FROM alpine
+
+RUN apk add --update npm
+COPY --from=buildStage ["/usr/src/app/dist", "/usr/src/app/package.json", "./"]
+RUN npm i --only=prod
+
+CMD [ "node", "index.js" ]

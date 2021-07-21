@@ -1,9 +1,13 @@
-FROM node
+FROM alpine
+
+RUN apk update
+RUN apk add npm
 
 WORKDIR /usr/src/app
 COPY . .
-RUN npm ci
+RUN npm i
 RUN npm run build
+
 RUN PORT=7000
 EXPOSE 7000
 

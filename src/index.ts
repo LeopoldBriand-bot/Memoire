@@ -1,16 +1,18 @@
-import * as dotenv from "dotenv";
+
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import {testRouter} from "./routes/test.router";
 
-dotenv.config();
-if (!process.env.PORT) {
-    console.error('It should have PORT ENV VAR in .env file');
-    process.exit(1);
+if (process.env.NODE_ENV === 'DEV') {
+    const dotenv=require('dotenv');
+    dotenv.config();
+    if (!process.env.PORT) {
+        console.error('It should have PORT ENV VAR in .env file');
+        process.exit(1);
+    }
 }
-
-const PORT: number = parseInt(process.env.PORT as string, 10);
+const PORT: number = parseInt(process.env.PORT as string, 10) | 7000;
 const app = express();
 
 app.use(helmet());

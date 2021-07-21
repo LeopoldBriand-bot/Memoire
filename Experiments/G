@@ -1,0 +1,17 @@
+FROM node:alpine AS buildStage
+
+WORKDIR /usr/src/app
+COPY . .
+RUN npm i && npm run build
+
+FROM node:alpine AS builded
+
+WORKDIR /app
+RUN apk add --update --no-cache npm
+COPY --from=buildStage ["/usr/src/app/dist", "/usr/src/app/package.json", "./"]
+RUN npm i --only=prod
+
+FROM astefanutti/scratch-node
+
+COPY --from=builded /app /
+ENTRYPOINT ["node", "index.js"]
